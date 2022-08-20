@@ -10,8 +10,7 @@ abstract class UseCase<Type, Params> {
 class NoParams extends Equatable implements Params {
   @override
   List<Object?> get props => [];
-  
+
   @override
-  // TODO: implement number
-  int get number => throw UnimplementedError();
+  int get number => 0;
 }

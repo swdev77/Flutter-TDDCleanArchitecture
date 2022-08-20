@@ -1,6 +1,6 @@
-# tdd_clean_architecture
+# TDD Clean Architecture
 
-A new Flutter project.
+TDD Clean Architecture
 
 ## Getting Started
 
