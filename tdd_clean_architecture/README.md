@@ -1,6 +1,10 @@
 # TDD Clean Architecture
 
+<<<<<<< HEAD
 TDD Clean Architecture
+=======
+TDD Clean Architecture.
+>>>>>>> 3406c001325052265f676e2fd9164ba4bae9213b
 
 ## Getting Started
 
