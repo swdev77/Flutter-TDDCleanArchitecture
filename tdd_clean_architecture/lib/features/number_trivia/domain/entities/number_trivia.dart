@@ -7,5 +7,5 @@ class NumberTrivia extends Equatable {
   const NumberTrivia({required this.text, required this.number}) : super();
   
   @override
-  List<dynamic> get props => [text, number];
+  List<Object> get props => [text, number];
 }
