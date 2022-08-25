@@ -11,19 +11,19 @@ import 'package:tdd_clean_architecture/features/number_trivia/domain/usecases/ge
 part 'number_trivia_event.dart';
 part 'number_trivia_state.dart';
 
-const String SERVER_FAILURE_MESSAGE = 'Server Failure';
-const String CACHE_FAILURE_MESSAGE = 'Cache Failure';
+const String serverFailureMessage = 'Server Failure';
+const String cachFailureMessage = 'Cache Failure';
 const String invalidInputFailureMessage =
     'Invalid Input - The number must be a positive integer or zero.';
 
 class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
-  final GetConcreteNumberTrivia getConcreteNumberTrivia;
-  final GetRandomNumberTrivia getRandomNumberTrivia;
+  final GetConcreteNumberTrivia concrete;
+  final GetRandomNumberTrivia random;
   final InputConverter inputConverter;
 
   NumberTriviaBloc({
-    required this.getConcreteNumberTrivia,
-    required this.getRandomNumberTrivia,
+    required this.concrete,
+    required this.random,
     required this.inputConverter,
   }) : super(Empty()) {
     on<GetTriviaForConcreteNumber>((event, emit) {
@@ -32,8 +32,7 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
         (failure) => emit(Error(message: invalidInputFailureMessage)),
         (integer) async {
           emit(Loading());
-          final failureOrTrivia =
-              await getConcreteNumberTrivia(Params(number: integer));
+          final failureOrTrivia = await concrete(Params(number: integer));
           emit(_eitherLoadedOrErrorState(failureOrTrivia));
         },
       );
@@ -42,7 +41,7 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
     on<GetTriviaForRandomNumber>(
       (event, emit) async {
         emit(Loading());
-        final failureOrTrivia = await getRandomNumberTrivia(NoParams());
+        final failureOrTrivia = await random(NoParams());
         emit(_eitherLoadedOrErrorState(failureOrTrivia));
       },
     );
@@ -59,9 +58,9 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
   String _mapFailureToMessage(Failure failure) {
     switch (failure.runtimeType) {
       case ServerFailure:
-        return SERVER_FAILURE_MESSAGE;
+        return serverFailureMessage;
       case CacheFailure:
-        return CACHE_FAILURE_MESSAGE;
+        return cachFailureMessage;
       default:
         return 'Unexpected Error';
     }

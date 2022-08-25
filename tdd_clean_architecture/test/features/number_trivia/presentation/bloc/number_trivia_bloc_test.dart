@@ -38,8 +38,8 @@ void main() {
     mockInputConverter = MockInputConverter();
 
     bloc = NumberTriviaBloc(
-      getConcreteNumberTrivia: mockGetConcreteNumberTrivia,
-      getRandomNumberTrivia: mockGetRandomNumberTrivia,
+      concrete: mockGetConcreteNumberTrivia,
+      random: mockGetRandomNumberTrivia,
       inputConverter: mockInputConverter,
     );
   });
@@ -124,7 +124,7 @@ void main() {
       act: (bloc) => bloc.add(GetTriviaForConcreteNumber(numberString)),
       expect: () => [
         Loading(),
-        Error(message: SERVER_FAILURE_MESSAGE),
+        Error(message: serverFailureMessage),
       ],
     );
 
@@ -137,7 +137,7 @@ void main() {
         return bloc;
       },
       act: (bloc) => bloc.add(GetTriviaForConcreteNumber(numberString)),
-      expect: () => [Loading(), Error(message: CACHE_FAILURE_MESSAGE)],
+      expect: () => [Loading(), Error(message: cachFailureMessage)],
     );
   });
 
@@ -178,7 +178,7 @@ void main() {
       act: (bloc) => bloc.add(GetTriviaForRandomNumber()),
       expect: () => [
         Loading(),
-        Error(message: SERVER_FAILURE_MESSAGE),
+        Error(message: serverFailureMessage),
       ],
     );
 
@@ -190,7 +190,10 @@ void main() {
         return bloc;
       },
       act: (bloc) => bloc.add(GetTriviaForRandomNumber()),
-      expect: () => [Loading(), Error(message: CACHE_FAILURE_MESSAGE),],
+      expect: () => [
+        Loading(),
+        Error(message: cachFailureMessage),
+      ],
     );
   });
 }
