@@ -26,16 +26,20 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
     required this.random,
     required this.inputConverter,
   }) : super(Empty()) {
-    on<GetTriviaForConcreteNumber>((event, emit) {
+    on<GetTriviaForConcreteNumber>((event, emit) async {
+      emit(Loading());
+
       final result = inputConverter.stringToUnsignedInteger(event.numberString);
-      result.fold(
-        (failure) => emit(Error(message: invalidInputFailureMessage)),
-        (integer) async {
-          emit(Loading());
-          final failureOrTrivia = await concrete(Params(number: integer));
-          emit(_eitherLoadedOrErrorState(failureOrTrivia));
-        },
-      );
+
+      if (result.isLeft()) {
+        emit(Error(message: invalidInputFailureMessage));
+        return;
+      }
+
+      late int number;
+      result.fold((_) => _, (r) => number = r);
+      final failureOrTrivia = await concrete(Params(number: number));
+      emit(_eitherLoadedOrErrorState(failureOrTrivia));
     });
 
     on<GetTriviaForRandomNumber>(

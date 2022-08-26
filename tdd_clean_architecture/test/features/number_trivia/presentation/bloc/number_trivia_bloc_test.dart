@@ -78,14 +78,14 @@ void main() {
     );
 
     blocTest<NumberTriviaBloc, NumberTriviaState>(
-      'should emit [Error] when the input is invalid',
+      'should emit [Empty, Error] when the input is invalid',
       build: () {
         when(() => mockInputConverter.stringToUnsignedInteger(any()))
             .thenReturn(Left(InvalidInputFailure()));
         return bloc;
       },
       act: (bloc) => bloc.add(GetTriviaForConcreteNumber(numberString)),
-      expect: () => [Error(message: invalidInputFailureMessage)],
+      expect: () => [Empty(), Error(message: invalidInputFailureMessage)],
     );
 
     blocTest<NumberTriviaBloc, NumberTriviaState>(
@@ -100,7 +100,7 @@ void main() {
     );
 
     blocTest<NumberTriviaBloc, NumberTriviaState>(
-      'should emit [Loading, Loaded] when data is gotten successfully',
+      'should emit [Empty, Loading, Loaded] when data is gotten successfully',
       build: () {
         setUpMockInputConverterSuccess();
         setUpMockGetConcreteNumberTriviaSuccess();
@@ -108,13 +108,14 @@ void main() {
       },
       act: (bloc) => bloc.add(GetTriviaForConcreteNumber(numberString)),
       expect: () => [
+        Empty(),
         Loading(),
         Loaded(trivia: numberTrivia),
       ],
     );
 
     blocTest<NumberTriviaBloc, NumberTriviaState>(
-      'should emit [Loading, Error] when getting data fails',
+      'should emit [Empty, Loading, Error] when getting data fails',
       build: () {
         setUpMockInputConverterSuccess();
         when(() => mockGetConcreteNumberTrivia(any()))
@@ -123,13 +124,14 @@ void main() {
       },
       act: (bloc) => bloc.add(GetTriviaForConcreteNumber(numberString)),
       expect: () => [
+        Empty(),
         Loading(),
         Error(message: serverFailureMessage),
       ],
     );
 
     blocTest<NumberTriviaBloc, NumberTriviaState>(
-      'should emit [Loading, Error] with proper message for the error when getting data fails',
+      'should emit [Empty, Loading, Error] with proper message for the error when getting data fails',
       build: () {
         setUpMockInputConverterSuccess();
         when(() => mockGetConcreteNumberTrivia(any()))
@@ -137,7 +139,11 @@ void main() {
         return bloc;
       },
       act: (bloc) => bloc.add(GetTriviaForConcreteNumber(numberString)),
-      expect: () => [Loading(), Error(message: cachFailureMessage)],
+      expect: () => [
+        Empty(),
+        Loading(),
+        Error(message: cachFailureMessage),
+      ],
     );
   });
 
@@ -165,7 +171,11 @@ void main() {
         return bloc;
       },
       act: (bloc) => bloc.add(GetTriviaForRandomNumber()),
-      expect: () => [Loading(), Loaded(trivia: numberTrivia)],
+      expect: () => [
+        Empty(),
+        Loading(),
+        Loaded(trivia: numberTrivia),
+      ],
     );
 
     blocTest<NumberTriviaBloc, NumberTriviaState>(
@@ -177,6 +187,7 @@ void main() {
       },
       act: (bloc) => bloc.add(GetTriviaForRandomNumber()),
       expect: () => [
+        Empty(),
         Loading(),
         Error(message: serverFailureMessage),
       ],
@@ -191,6 +202,7 @@ void main() {
       },
       act: (bloc) => bloc.add(GetTriviaForRandomNumber()),
       expect: () => [
+        Empty(),
         Loading(),
         Error(message: cachFailureMessage),
       ],
