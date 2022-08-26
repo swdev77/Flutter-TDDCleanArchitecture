@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tdd_clean_architecture/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:tdd_clean_architecture/features/number_trivia/presentation/bloc/bloc/number_trivia_bloc.dart';
 import 'package:tdd_clean_architecture/injection_container.dart';
 
@@ -51,7 +50,7 @@ BlocProvider<NumberTriviaBloc> buildBody(BuildContext context) {
             ),
             const SizedBox(height: 20),
             //Bottom half
-            TriviaControls(),
+            const TriviaControls(),
           ],
         ),
       ),
@@ -63,10 +62,10 @@ class TriviaControls extends StatefulWidget {
   const TriviaControls({super.key});
 
   @override
-  _TriviaControlsState createState() => _TriviaControlsState();
+  TriviaControlsState createState() => TriviaControlsState();
 }
 
-class _TriviaControlsState extends State<TriviaControls> {
+class TriviaControlsState extends State<TriviaControls> {
   final controller = TextEditingController();
   late String inputStr;
 
@@ -89,15 +88,15 @@ class _TriviaControlsState extends State<TriviaControls> {
           children: [
             Expanded(
               child: TextButton(
-                child: const Text('Search'),
                 onPressed: dispatchConcrete,
+                child: const Text('Search'),
               ),
             ),
             const SizedBox(height: 10),
             Expanded(
               child: TextButton(
-                child: const Text('Get random trivia'),
                 onPressed: dispatchRandom,
+                child: const Text('Get random trivia'),
               ),
             ),
           ],
